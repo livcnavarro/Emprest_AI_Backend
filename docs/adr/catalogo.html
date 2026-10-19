@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>EMPREST.AI — Catálogo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --color-bg: #161826;
+      --color-surface: #232532;
+      --color-text: #e9e9ed;
+      --color-divider: color-mix(in srgb, #e9e9ed 16%, transparent);
+      --color-accent: #2fb8ac;
+      --color-accent-300: #93e3da;
+      --color-accent-700: #1d746d;
+      --color-accent-900: #0f3733;
+      --font-heading: "Raleway", sans-serif;
+      --font-body: "Raleway", sans-serif;
+      --radius-md: 8px;
+      --radius-lg: 14px;
+      --shadow-sm: 0 1px 0 color-mix(in srgb, #e9e9ed 6%, transparent);
+    }
+
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      min-height: 820px;
+      background: var(--color-bg);
+      color: var(--color-text);
+      font-family: var(--font-body);
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 1.55;
+    }
+    button, input { font-family: inherit; }
+    button:focus-visible, input:focus-visible {
+      outline: 2px solid var(--color-accent);
+      outline-offset: 2px;
+    }
+
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      padding: 0 40px;
+      gap: 32px;
+      background: var(--color-bg);
+    }
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 8.4px;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+    .nav-mark {
+      width: 24px;
+      height: 24px;
+      border: 1.5px solid var(--color-accent);
+      border-radius: 6.5px;
+      display: grid;
+      place-items: center;
+    }
+    .nav-mark span {
+      width: 8.5px;
+      height: 8.5px;
+      border-radius: 2px;
+      background: var(--color-accent);
+    }
+    .nav-brand .dot { color: var(--color-accent); }
+    .nav-tabs {
+      display: flex;
+      align-items: stretch;
+      height: 60px;
+      flex: 1;
+    }
+    .nav-tab {
+      height: 60px;
+      padding: 0 14px;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      color: color-mix(in srgb, var(--color-text) 55%, transparent);
+      border-bottom: 2px solid transparent;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    .nav-tab.is-active {
+      color: var(--color-text);
+      border-bottom-color: var(--color-accent);
+    }
+    .nav-end {
+      display: flex;
+      align-items: center;
+      gap: 11.2px;
+      margin-left: auto;
+    }
+    .tag.tag-outline {
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 3px 9px;
+      border-radius: 999px;
+      border: 1px solid var(--color-divider);
+      color: color-mix(in srgb, var(--color-text) 70%, transparent);
+    }
+    .avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 999px;
+      display: grid;
+      place-items: center;
+      font-size: 11px;
+      font-weight: 600;
+      background: var(--color-accent-900);
+      border: 1px solid var(--color-accent-700);
+      color: var(--color-accent-300);
+    }
+    .nav-name { font-size: 13.5px; }
+
+    .page { padding: 36px 40px 64px; }
+    .page-inner {
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 16.8px;
+    }
+    .page-inner[data-view="catalogo"] { max-width: 1240px; }
+    .page-inner[data-view="meus"] { max-width: 1000px; }
+    .page-head {
+      display: flex;
+      align-items: flex-end;
+      gap: 16px;
+    }
+    h1 {
+      margin: 0;
+      font-size: 30px;
+      font-weight: 600;
+      line-height: 1.12;
+      letter-spacing: -0.015em;
+      font-family: var(--font-heading);
+    }
+    .lead {
+      margin: 0;
+      font-size: 14px;
+      color: color-mix(in srgb, var(--color-text) 55%, transparent);
+    }
+    .page-head .lead { flex: 1; }
+    .input {
+      height: 36px;
+      width: 260px;
+      padding: 6px 10px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--color-divider);
+      background: var(--color-surface);
+      color: var(--color-text);
+      font-size: 13.5px;
+    }
+
+    .chips { display: flex; gap: 8.4px; }
+    .chip {
+      height: 32px;
+      padding: 0 12px;
+      border-radius: 999px;
+      border: 1px solid var(--color-divider);
+      background: transparent;
+      color: color-mix(in srgb, var(--color-text) 70%, transparent);
+      font-size: 12.5px;
+      cursor: pointer;
+    }
+    .chip.is-active {
+      border-color: var(--color-accent);
+      color: var(--color-accent);
+      background: rgba(47,184,172,0.10);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(292px, 1fr));
+      gap: 16px;
+    }
+    .card {
+      background: var(--color-surface);
+      border-radius: var(--radius-lg);
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      box-shadow: var(--shadow-sm);
+      animation: fadeUp 0.25s ease both;
+    }
+    .card-top { display: flex; align-items: flex-start; gap: 8.4px; }
+    .card-copy { flex: 1; display: flex; flex-direction: column; gap: 2.8px; min-width: 0; }
+    .card-kicker {
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: color-mix(in srgb, var(--color-text) 45%, transparent);
+    }
+    .card-title {
+      font-size: 16.5px;
+      font-weight: 600;
+      line-height: 1.12;
+      letter-spacing: -0.015em;
+    }
+    .meta {
+      font-size: 12px;
+      color: color-mix(in srgb, var(--color-text) 45%, transparent);
+    }
+    .detail {
+      min-height: 18px;
+      font-size: 12.5px;
+      color: color-mix(in srgb, var(--color-text) 72%, transparent);
+    }
+    .pill {
+      padding: 3px 9px;
+      border-radius: 999px;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+    .pill-ok { color: #5fcfc4; background: rgba(47,184,172,0.12); border: 1px solid rgba(47,184,172,0.40); }
+    .pill-loan { color: #c9a25f; background: rgba(201,162,95,0.12); border: 1px solid rgba(201,162,95,0.38); }
+    .pill-off { color: #9aa0ad; background: rgba(154,160,173,0.10); border: 1px solid rgba(154,160,173,0.30); }
+
+    .slots {
+      display: flex;
+      gap: 8.4px;
+    }
+    .slot {
+      flex: 1;
+      height: 5px;
+      border-radius: 999px;
+      background: color-mix(in srgb, var(--color-text) 12%, transparent);
+    }
+    .slot.is-on { background: var(--color-accent); }
+
+    .loan {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 18px 20px;
+      background: var(--color-surface);
+      border-radius: var(--radius-md);
+      border-left: 3px solid #5fcfc4;
+    }
+    .loan-item { flex: 1.4; font-size: 16px; font-weight: 500; }
+    .loan-col { flex: 1; }
+    .loan-col .k {
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: color-mix(in srgb, var(--color-text) 45%, transparent);
+    }
+    .loan-col .v { font-size: 13.5px; }
+    .loan-pill { flex: 0.9; }
+
+    .rules {
+      display: flex;
+      gap: 16.8px;
+      font-size: 12.5px;
+      color: color-mix(in srgb, var(--color-text) 40%, transparent);
+    }
+
+    .empty {
+      padding: 40px;
+      text-align: center;
+      color: color-mix(in srgb, var(--color-text) 55%, transparent);
+    }
+    .hidden { display: none !important; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: none; }
+    }
+  </style>
+</head>
+<body>
+  <header class="nav">
+    <div class="nav-brand">
+      <div class="nav-mark"><span></span></div>
+      EMPREST<span class="dot">.AI</span>
+    </div>
+    <div class="nav-tabs">
+      <button class="nav-tab is-active" type="button" data-view="catalogo">Catálogo</button>
+      <button class="nav-tab" type="button" data-view="meus">Meus empréstimos</button>
+    </div>
+    <div class="nav-end">
+      <span class="tag tag-outline">Colaborador</span>
+      <div class="avatar">AR</div>
+      <span class="nav-name">Ana Ribeiro</span>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="page-inner" id="inner" data-view="catalogo">
+      <section id="view-catalogo">
+        <div class="page-head">
+          <h1>Catálogo</h1>
+          <p class="lead" id="count"></p>
+          <input class="input" id="query" type="search" placeholder="Buscar por nome ou patrimônio" />
+        </div>
+        <div class="chips" id="chips"></div>
+        <div class="grid" id="grid"></div>
+        <div class="empty hidden" id="empty">Nenhum equipamento nesta busca.</div>
+      </section>
+
+      <section id="view-meus" class="hidden">
+        <div class="page-head">
+          <h1>Meus empréstimos</h1>
+          <p class="lead">2 de 3 itens em seu nome · prazo padrão de 14 dias</p>
+        </div>
+        <div class="slots">
+          <div class="slot is-on"></div>
+          <div class="slot is-on"></div>
+          <div class="slot"></div>
+        </div>
+        <div class="loan">
+          <div class="loan-item">Câmera Sony ZV-1<br /><span class="meta">TI-0301</span></div>
+          <div class="loan-col"><div class="k">Retirada</div><div class="v">29/08/2026</div></div>
+          <div class="loan-col"><div class="k">Devolver até</div><div class="v" style="color:#5fcfc4">12/09/2026</div></div>
+          <div class="loan-pill"><span class="pill pill-ok">Em dia</span></div>
+        </div>
+        <div class="loan">
+          <div class="loan-item">Dock Thunderbolt 4<br /><span class="meta">TI-0512</span></div>
+          <div class="loan-col"><div class="k">Retirada</div><div class="v">22/08/2026</div></div>
+          <div class="loan-col"><div class="k">Devolver até</div><div class="v" style="color:#5fcfc4">05/09/2026</div></div>
+          <div class="loan-pill"><span class="pill pill-ok">Em dia</span></div>
+        </div>
+        <div class="rules">
+          <span>Máximo de 3 itens</span>
+          <span>Prazo padrão de 14 dias</span>
+          <span>Atraso bloqueia novo empréstimo</span>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    const ME = "Ana Ribeiro";
+    const items = [
+      { id: "TI-0142", name: "Notebook Dell Latitude 5450", cat: "Notebook", status: "disponivel" },
+      { id: "TI-0088", name: "MacBook Pro 14 M3", cat: "Notebook", status: "emprestado", person: "Marcos Lemos", until: "07/09/2026" },
+      { id: "TI-0231", name: 'Monitor LG 27" 4K', cat: "Monitor", status: "disponivel" },
+      { id: "TI-0233", name: 'Monitor Dell 24" FHD', cat: "Monitor", status: "manutencao", note: "Painel com falha, retorna em 05/09" },
+      { id: "TI-0301", name: "Câmera Sony ZV-1", cat: "Câmera", status: "emprestado", person: ME, until: "12/09/2026" },
+      { id: "TI-0455", name: "Cabo HDMI 2.1 3m", cat: "Cabo", status: "disponivel" },
+      { id: "TI-0512", name: "Dock Thunderbolt 4", cat: "Acessório", status: "emprestado", person: ME, until: "05/09/2026" },
+      { id: "TI-0318", name: "Tripé Manfrotto Befree", cat: "Acessório", status: "manutencao", note: "Trava do centro quebrada" },
+      { id: "TI-0402", name: "Headset Jabra Evolve2", cat: "Acessório", status: "disponivel" },
+    ];
+
+    let query = "";
+    let filter = "Todos";
+    let view = "catalogo";
+
+    function pill(status) {
+      if (status === "disponivel") return ["pill pill-ok", "Disponível"];
+      if (status === "manutencao") return ["pill pill-off", "Em manutenção"];
+      return ["pill pill-loan", "Emprestado"];
+    }
+
+    function detail(item) {
+      if (item.status === "disponivel") return "Pronto para retirada no balcão";
+      if (item.status === "manutencao") return item.note;
+      return "Com " + item.person + " · devolver até " + item.until;
+    }
+
+    function visible() {
+      const q = query.trim().toLowerCase();
+      return items.filter((item) => {
+        if (filter === "Disponíveis" && item.status !== "disponivel") return false;
+        if (filter === "Emprestados" && item.status !== "emprestado") return false;
+        if (filter === "Em manutenção" && item.status !== "manutencao") return false;
+        if (!q) return true;
+        return item.name.toLowerCase().includes(q) || item.id.toLowerCase().includes(q);
+      });
+    }
+
+    function showView(name) {
+      view = name;
+      document.getElementById("inner").dataset.view = name;
+      document.getElementById("view-catalogo").classList.toggle("hidden", name !== "catalogo");
+      document.getElementById("view-meus").classList.toggle("hidden", name !== "meus");
+      document.querySelectorAll(".nav-tab").forEach((tab) => {
+        tab.classList.toggle("is-active", tab.dataset.view === name);
+      });
+    }
+
+    function render() {
+      const all = items.length;
+      const avail = items.filter((i) => i.status === "disponivel").length;
+      document.getElementById("count").textContent = avail + " de " + all + " equipamentos disponíveis agora";
+
+      const chips = document.getElementById("chips");
+      chips.innerHTML = "";
+      ["Todos", "Disponíveis", "Emprestados", "Em manutenção"].forEach((name) => {
+        const b = document.createElement("button");
+        b.className = "chip" + (filter === name ? " is-active" : "");
+        b.type = "button";
+        b.textContent = name;
+        b.addEventListener("click", () => { filter = name; render(); });
+        chips.appendChild(b);
+      });
+
+      const list = visible();
+      const grid = document.getElementById("grid");
+      const empty = document.getElementById("empty");
+      grid.innerHTML = "";
+      empty.classList.toggle("hidden", list.length > 0);
+      list.forEach((item, index) => {
+        const [pillClass, pillText] = pill(item.status);
+        const card = document.createElement("article");
+        card.className = "card";
+        card.style.animationDelay = index * 30 + "ms";
+        card.innerHTML =
+          '<div class="card-top">' +
+            '<div class="card-copy">' +
+              '<div class="card-kicker">' + item.cat + "</div>" +
+              '<div class="card-title">' + item.name + "</div>" +
+              '<div class="meta">' + item.id + "</div>" +
+            "</div>" +
+            '<span class="' + pillClass + '">' + pillText + "</span>" +
+          "</div>" +
+          '<div class="detail">' + detail(item) + "</div>";
+        grid.appendChild(card);
+      });
+    }
+
+    document.querySelectorAll(".nav-tab").forEach((tab) => {
+      tab.addEventListener("click", () => showView(tab.dataset.view));
+    });
+    document.getElementById("query").addEventListener("input", (e) => {
+      query = e.target.value;
+      render();
+    });
+
+    render();
+  </script>
+</body>
+</html>
