@@ -1,6 +1,6 @@
 # Instruções para agentes
 
-Este repositório é só documentação e decisões. Não escreva código de produto aqui.
+Este repositório é só documentação e decisões. Não escreva código de produto aqui, apenas quando eu pedir.
 
 ## Documentos
 
@@ -36,6 +36,3 @@ ADRs novos têm que ser coerentes com o PRD, o `layout.md` e o ADR-001. `stacks.
 
 Quando uma decisão de stack ou de produto fechar na conversa, grave o arquivo do ADR em `docs/adr/` sem pedir de novo para criar o arquivo.
 
-## Pedidos fora do escopo
-
-Se pedirem código de produto neste repo, ou edição de PRD, ADR-001, `stacks.md` ou `layout.md`: recuse, diga que este repo é só docs / que aquele arquivo não se edita, e sugira um ADR novo se for decisão de stack.
