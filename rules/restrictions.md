@@ -1,19 +1,22 @@
 # Restrições do projeto
 
-Fontes: `AGENTS.md`, `docs/adr/prd.md`, `docs/adr/001-stack.md`, `docs/adr/layout.md`.
+Fontes: `AGENTS.md` e os ADRs aprovados em `../docs/adr/`.
 `docs/adr/stacks.md` existe e é rascunho até virar ADR. Não use como fonte de decisão nem como restrição.
 
 ---
 
 ## 1. Este repositório
 
-- Só documentação e decisões. Não escreva código de produto aqui.
-- Só criar ADRs novos em `docs/adr/`, numeração sequencial (`002-…`, `003-…`) no padrão de `001-stack.md`.
-- Não alterar: `docs/adr/prd.md`, `docs/adr/001-stack.md`, `docs/adr/stacks.md`, `docs/adr/layout.md`.
-- ADRs novos têm que ser coerentes com o PRD, o `layout.md` e o ADR-001.
-- Quando uma decisão de stack ou de produto fechar na conversa, grave o ADR em `docs/adr/` sem pedir de novo para criar o arquivo.
-- Se pedirem código de produto neste repo, ou edição dos arquivos congelados: recuse, diga que este repo é só docs / que aquele arquivo não se edita, e sugira um ADR novo se for decisão de stack.
-- Item marcado como não decidido: pare e pergunte. Não escolha sozinho.
+- Este é o repositório separado de código do Backend. Alterações de produto
+  solicitadas pela usuária pertencem aqui; decisões e PRD têm como fonte
+  `../docs/adr/`.
+- As cópias de ADRs em `docs/adr/` podem estar desatualizadas e não prevalecem
+  sobre decisões aceitas mais recentes em `../docs/adr/`.
+- Não grave, imprima ou versione credenciais reais. `DATABASE_URL` local é
+  configurada pela usuária em `.env.local`, ignorado pelo Git.
+- Não execute migration, seed ou qualquer escrita em produção. A usuária
+  aprova e executa essas operações.
+- Respeite os itens ainda não decididos; pare e pergunte em vez de escolher.
 
 ---
 
@@ -78,7 +81,8 @@ Só a tabela abaixo está decidida.
 - API: GraphQL, tRPC, código sem camadas
 - Testes: Vitest; migration na mão / SQL solto
 
-**Não decidir sozinho (ADR-001 lista como não decidido)**
+**Não decidir sozinho (ADR-001 lista como não decidido; ADR-005 fecha apenas o
+modelo mínimo da carga inicial)**
 
 - Build e dev server do front
 - Roteamento no front
@@ -88,7 +92,7 @@ Só a tabela abaixo está decidida.
 - CI/CD
 - Observabilidade / logs
 - Estratégia de backup e recuperação
-- Modelagem de domínio e tabelas
+- Modelo de empréstimos e tabelas fora de Equipment/Profile da carga inicial
 - Qualquer item fora da tabela de decisões
 
 O ADR-001 afirma ainda: a regra de quem acessa o quê fica no banco (RLS), não espalhada na API; identidade e permissão ficam no Supabase; mudança de schema anda versionada com o código (migration).

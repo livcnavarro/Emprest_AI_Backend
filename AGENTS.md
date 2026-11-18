@@ -1,6 +1,8 @@
 # Instruções para agentes
 
-Este repositório é só documentação e decisões. Não escreva código de produto aqui, apenas quando eu pedir.
+Este é o repositório de código do Emprest.AI Backend. Implemente ou altere
+código de produto aqui quando a usuária pedir explicitamente. O repositório de
+documentação e decisões fica na pasta irmã `../docs`.
 
 ## Documentos
 
@@ -23,16 +25,18 @@ Este repositório é só documentação e decisões. Não escreva código de pro
 | API | REST, MVC |
 | Testes | Jest, Migration |
 
-O ADR-001 marca como não decididos: build e dev server do front, roteamento no front, estado de servidor e de cliente no front, estilização e biblioteca de componentes, regras exatas de RLS e autorização por papel, CI/CD, observabilidade/logs, estratégia de backup e recuperação, modelagem de domínio e tabelas, e qualquer item que não está na tabela acima.
+O ADR-001 marca como não decididos: build e dev server do front, roteamento no front, estado de servidor e de cliente no front, estilização e biblioteca de componentes, regras exatas de RLS e autorização por papel, CI/CD, observabilidade/logs, estratégia de backup e recuperação, modelo de empréstimos e qualquer item que não está na tabela acima. O modelo inicial Equipment/Profile foi decidido no ADR-005 da pasta irmã `../docs/adr/`.
 
 Se um item estiver não decidido: pare e pergunte. Não escolha sozinho.
 
-## O que editar
+## Escopo e segurança
 
-- Só criar ADRs novos em `docs/adr/`, numeração sequencial a partir do padrão `001-stack.md` (`002-…`, `003-…`).
-- Não alterar `docs/adr/prd.md`, `docs/adr/001-stack.md`, `docs/adr/stacks.md` nem `docs/adr/layout.md`.
-
-ADRs novos têm que ser coerentes com o PRD, o `layout.md` e o ADR-001. `stacks.md` não conta como restrição.
-
-Quando uma decisão de stack ou de produto fechar na conversa, grave o arquivo do ADR em `docs/adr/` sem pedir de novo para criar o arquivo.
+- Mantenha o código de produto neste repositório Backend; não altere o
+  repositório de documentação por tarefas de implementação.
+- Trate `../docs/adr/` como fonte de decisões aprovada. As cópias em
+  `docs/adr/` não prevalecem sobre decisões mais recentes dessa fonte.
+- Não grave, imprima, solicite ou versione valores reais de credenciais.
+  `DATABASE_URL` local é configurada pela usuária em `.env.local`.
+- Nunca execute migration, seed ou outra escrita contra produção. A usuária
+  revisa e executa essas operações.
 

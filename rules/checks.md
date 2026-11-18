@@ -1,20 +1,18 @@
 # Checks do projeto
 
 Use este arquivo para conferir o trabalho antes de dar por pronto.
-Fontes: `AGENTS.md`, `rules/restrictions.md`, `docs/adr/prd.md`, `docs/adr/001-stack.md`, `docs/adr/layout.md`.
+Fontes: `AGENTS.md`, `rules/restrictions.md` e os ADRs aprovados em `../docs/adr/`.
 Não use `docs/adr/stacks.md` como critério.
 
 ---
 
 ## 1. Este repositório (todo entrega)
 
-- [ ] Não há código de produto neste repo.
-- [ ] `docs/adr/prd.md`, `docs/adr/001-stack.md`, `docs/adr/stacks.md` e `docs/adr/layout.md` não foram alterados.
-- [ ] Arquivo novo de decisão está em `docs/adr/`, com número seguinte ao último ADR (`002-…`, `003-…`).
-- [ ] Nada que o ADR-001 marca como não decidido foi escolhido sem pergunta.
-- [ ] Nada que só existe em `stacks.md` foi tratado como decisão fechada.
-- [ ] Se a decisão de stack ou produto fechou na conversa, o arquivo do ADR foi gravado em `docs/adr/`.
-- [ ] Pedido de código de produto ou de edição de arquivo congelado foi recusado (repo só docs / arquivo não se edita), com sugestão de ADR se for decisão de stack.
+- [ ] Código de produto alterado somente neste repositório Backend, quando solicitado.
+- [ ] ADRs aprovados em `../docs/adr/` não foram alterados pela implementação.
+- [ ] Nada que os ADRs marcam como não decidido foi escolhido sem pergunta.
+- [ ] Nenhuma credencial real foi solicitada, lida, registrada ou versionada.
+- [ ] Nenhuma migration, seed ou escrita foi executada contra produção.
 
 ---
 
@@ -88,7 +86,7 @@ Conferir se o texto (ADR ou descrição) cobre só isto, e isto por inteiro:
 - [ ] CI/CD
 - [ ] Observabilidade / logs
 - [ ] Backup e recuperação
-- [ ] Modelagem de domínio e tabelas
+- [ ] Modelo de empréstimos e tabelas fora de Equipment/Profile da carga inicial
 - [ ] Qualquer item fora da tabela do ADR-001
 
 ---

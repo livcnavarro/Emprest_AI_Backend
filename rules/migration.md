@@ -1,78 +1,32 @@
-# Migration
+# Prisma migrations
 
-Fontes: `rules/checks.md`, `AGENTS.md`, `rules/restrictions.md`, `docs/adr/prd.md`, `docs/adr/001-stack.md`, `docs/adr/layout.md`.
-Não use `docs/adr/stacks.md`.
+Fontes de decisão: `../docs/adr/001-stack.md`,
+`../docs/adr/005-initial-catalog-profile.md` e
+`../docs/adr/006-vercel-deploy-configuration.md`. Não use
+`docs/adr/stacks.md`.
 
-Este repositório é só documentação. Não grave schema Prisma, SQL nem código de produto aqui. Modelagem de domínio e tabelas continua não decidida: pare e pergunte; não escolha sozinho.
+## Modelo e propriedade do schema
 
----
+- O modelo inicial de `Equipment` e `Profile` está fechado pelo ADR-005.
+- Prisma é o único dono das migrations de domínio; gere migrations pelo Prisma
+  CLI. Não escreva nem edite SQL de migration manualmente.
+- O schema `auth` e `auth.users` pertencem ao Supabase. Uma migration pode
+  referenciar a PK existente `auth.users(id)`, mas não pode criar, alterar ou
+  assumir propriedade de objetos Auth.
+- Antes de aceitar uma migration gerada, confira que ela altera apenas os
+  objetos de domínio em `public` e a FK para `auth.users(id)`. Se o fluxo Prisma
+  não conseguir respeitar esse limite, pare e peça nova decisão; não contorne
+  com SQL manual.
+- Não modele nem crie empréstimos nesta carga inicial. O perfil Operações não
+  define policies RLS; regras exatas de RLS e autorização continuam pendentes.
 
-## O que está fechado (ADR-001)
+## Conexão e execução
 
-- Banco: Postgres no Supabase. Sem MySQL, MongoDB, nem servidor de banco próprio.
-- Schema e acesso: Prisma. Sem TypeORM, Knex, Drizzle.
-- Validação na borda da API: ZOD. Sem Joi, Yup.
-- Testes: Jest. Sem Vitest. Segunda suíte em paralelo não entra.
-- Mudança de schema: migration versionada junto com o código. Dono único: Prisma.
-- Sem migration na mão e sem SQL solto: dois donos de schema no mesmo banco se sobrescrevem.
-- Adicionar coluna exige o fluxo de migration + validação de schema. Não rodar um script solto.
-- Autenticação: RLS no banco, não checagem espalhada na API. Autorização: Supabase. Regras exatas de RLS e de papel não estão decididas.
-- Host, auth, autorização e banco no mesmo provedor (Supabase). Sair disso depois tem custo.
-- Trocar de ORM depois tem custo: schema e migration ficam no Prisma.
-
----
-
-## O que a v1 vai precisar persistir (domínio, não tabelas)
-
-O PRD e o layout descrevem fatos de negócio. Isso não é modelagem de tabelas.
-
-**Pessoa / sessão**
-
-- Login. Cada pessoa vê só os próprios empréstimos.
-- Papéis: Colaborador e Operações. Visão completa de empréstimos só em Operações.
-- Operações cadastra equipamentos e registra devolução no balcão.
-
-**Equipamento**
-
-- Catálogo com situação.
-- Tipos no problema do PRD: notebooks, monitores, cabos, câmeras. No cadastro do layout: Notebook, Monitor, Cabo, Câmera, Acessório.
-- Cadastro: nome obrigatório; patrimônio (vazio cai para `TI-—` no layout); observações; situação inicial Disponível ou Em manutenção.
-- Manutenção não aparece como disponível.
-
-**Empréstimo**
-
-- Solicitar item disponível; prazo padrão 14 dias (layout: devolver até = hoje + 14 dias).
-- Devolver (pela pessoa ou no balcão) devolve o item a disponível.
-- No máximo 3 itens por pessoa ao mesmo tempo.
-- Item em atraso impede novo empréstimo.
-- Operações vê todos os empréstimos em aberto.
-
-**Fora da v1 (não migrar, não importar, não versionar como feature)**
-
-- Reserva com data futura.
-- Notificação por e-mail.
-- Importação da planilha atual. O critério de sucesso do PRD é abandonar a planilha depois de duas semanas de uso, não carregá-la.
-
----
-
-## O que um ADR de schema/migration precisa passar
-
-Os mesmos checks de `rules/checks.md` que tocam banco:
-
-- Coerente com PRD, layout e tabela do ADR-001.
-- Não reabre as alternativas descartadas de ORM, banco, validação, testes e SQL solto.
-- Não fecha sozinho: modelagem de tabelas, regras exatas de RLS, CI/CD, backup e recuperação.
-- Se falar em mudança de schema: migration versionada no Prisma, com validação (ZOD na borda, Jest na suíte).
-- RLS continua no banco.
-
-Quando essa decisão fechar na conversa, grave um ADR novo em `docs/adr/` (`002-…` em diante). Não edite o ADR-001.
-
----
-
-## Ainda não decidido (não inventar nesta pasta)
-
-- Modelagem de domínio e tabelas
-- Regras exatas de RLS e autorização por papel
-- CI/CD (quando e como aplicar migration)
-- Estratégia de backup e recuperação
-- Qualquer comando, pasta ou ferramenta de migrate que não esteja na tabela do ADR-001
+- `DATABASE_URL` é uma conexão direta usada pelo Prisma CLI local nesta
+  entrega. A usuária configura o valor real em `.env.local`; nunca solicite,
+  leia, imprima ou versione esse valor.
+- `.env.example` contém somente placeholders e `.env.local` deve permanecer
+  ignorado pelo Git.
+- Gere e valide a migration apenas no Supabase local após confirmação da
+  usuária. Não execute migration, seed ou qualquer escrita contra produção.
+- A usuária revisa e executa todas as operações de produção manualmente.

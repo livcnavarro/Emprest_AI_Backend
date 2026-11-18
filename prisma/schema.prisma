@@ -1,0 +1,83 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  schemas  = ["public", "auth"]
+}
+
+enum EquipmentCategory {
+  Notebook
+  Monitor
+  Cabo
+  Camera    @map("Câmera")
+  Accessory @map("Acessório")
+
+  @@map("equipment_category")
+  @@schema("public")
+}
+
+enum EquipmentStatus {
+  Disponivel   @map("Disponível")
+  Emprestado
+  EmManutencao @map("Em manutenção")
+
+  @@map("equipment_status")
+  @@schema("public")
+}
+
+enum ProfileRole {
+  Colaborador
+  Operacoes @map("Operações")
+
+  @@map("profile_role")
+  @@schema("public")
+}
+
+model Equipment {
+  patrimony String            @id
+  name      String
+  category  EquipmentCategory
+  status    EquipmentStatus
+  imagePath String            @map("image_path")
+  loans     Loan[]
+
+  @@map("equipment")
+  @@schema("public")
+}
+
+model Profile {
+  authUserId String     @id @db.Uuid @map("auth_user_id")
+  role       ProfileRole
+  authUser   AuthUser   @relation(fields: [authUserId], references: [id], onDelete: Cascade)
+
+  @@map("profiles")
+  @@schema("public")
+}
+
+model AuthUser {
+  id      String   @id @db.Uuid
+  profile Profile?
+  loans   Loan[]
+
+  @@map("users")
+  @@schema("auth")
+}
+
+model Loan {
+  id                 String    @id @default(uuid()) @db.Uuid
+  authUserId         String    @db.Uuid @map("auth_user_id")
+  equipmentPatrimony String    @map("equipment_patrimony")
+  createdAt          DateTime  @default(now()) @db.Timestamptz(6) @map("created_at")
+  dueDate            DateTime  @db.Date @map("due_date")
+  returnedAt         DateTime? @db.Timestamptz(6) @map("returned_at")
+  authUser           AuthUser  @relation(fields: [authUserId], references: [id])
+  equipment          Equipment @relation(fields: [equipmentPatrimony], references: [patrimony])
+
+  @@index([authUserId, returnedAt])
+  @@index([equipmentPatrimony, returnedAt])
+  @@map("loans")
+  @@schema("public")
+}
